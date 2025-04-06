@@ -14,8 +14,7 @@ Une application web moderne pour gérer votre plan de table et suivre les confir
 
 - [Next.js](https://nextjs.org/) - Framework React
 - [TypeScript](https://www.typescriptlang.org/) - Typage statique
-- [MongoDB](https://www.mongodb.com/) - Base de données NoSQL
-- [Mongoose](https://mongoosejs.com/) - ODM pour MongoDB
+- [localStorage](https://developer.mozilla.org/fr/docs/Web/API/Window/localStorage) - Stockage local côté client
 - [Tailwind CSS](https://tailwindcss.com/) - Framework CSS utilitaire
 - [React Icons](https://react-icons.github.io/react-icons/) - Bibliothèque d'icônes
 
@@ -23,7 +22,7 @@ Une application web moderne pour gérer votre plan de table et suivre les confir
 
 1. Clonez le dépôt
 ```bash
-git clone https://github.com/votre-username/plan-de-table.git
+git clone https://github.com/maxtouf/plan-de-table.git
 cd plan-de-table
 ```
 
@@ -32,17 +31,22 @@ cd plan-de-table
 npm install
 ```
 
-3. Créez un fichier `.env.local` à la racine du projet avec les variables suivantes:
-```
-MONGODB_URI=mongodb://localhost:27017/plan-de-table
-```
-
-4. Lancez le serveur de développement
+3. Lancez le serveur de développement
 ```bash
 npm run dev
 ```
 
-5. Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur
+4. Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur
+
+## À propos du stockage des données
+
+Cette application utilise le stockage local (localStorage) du navigateur pour stocker toutes les données. Cela signifie que :
+- Les données sont persistantes entre les sessions de navigation
+- Les données sont stockées uniquement sur le navigateur de l'utilisateur
+- Les données ne sont pas synchronisées entre différents appareils
+- Les données peuvent être perdues si l'utilisateur efface le cache de son navigateur
+
+Cette approche est idéale pour tester l'application en local sans avoir besoin de configurer une base de données.
 
 ## Déploiement
 

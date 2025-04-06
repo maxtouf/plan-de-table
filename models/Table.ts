@@ -1,5 +1,3 @@
-import mongoose, { Schema, models } from 'mongoose';
-
 export interface ITable {
   _id?: string;
   name: string;
@@ -10,17 +8,4 @@ export interface ITable {
   updatedAt: Date;
 }
 
-const TableSchema = new Schema<ITable>(
-  {
-    name: { type: String, required: true },
-    number: { type: Number, required: true, unique: true },
-    capacity: { type: Number, required: true },
-    notes: { type: String },
-  },
-  { timestamps: true }
-);
-
-// Prevent multiple model initialization
-const Table = models.Table || mongoose.model<ITable>('Table', TableSchema);
-
-export default Table; 
+export default ITable; 

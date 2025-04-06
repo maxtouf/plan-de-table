@@ -1,15 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Table from '@/models/Table';
-import connectDB from '@/lib/mongodb';
+import { tableAPI } from '@/lib/localStore';
 
 export async function GET(request: NextRequest) {
   try {
-    // Connect to the database
-    await connectDB();
-    
-    // Get all tables
-    const tables = await Table.find({}).sort({ number: 1 });
-    
+    const tables = await tableAPI.getAll();
     return NextResponse.json(tables, { status: 200 });
   } catch (error) {
     console.error("Error fetching tables:", error);
@@ -20,14 +14,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    
-    // Connect to the database
-    await connectDB();
-    
-    // Create a new table
-    const newTable = new Table(body);
-    await newTable.save();
-    
+    const newTable = await tableAPI.create(body);
     return NextResponse.json(newTable, { status: 201 });
   } catch (error) {
     console.error("Error creating table:", error);

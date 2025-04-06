@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Table from '@/models/Table';
-import connectDB from '@/lib/mongodb';
+import { tableAPI } from '@/lib/localStore';
 
 interface Params {
   params: {
@@ -11,12 +10,7 @@ interface Params {
 export async function GET(request: NextRequest, { params }: Params) {
   try {
     const { id } = params;
-    
-    // Connect to the database
-    await connectDB();
-    
-    // Find table by ID
-    const table = await Table.findById(id);
+    const table = await tableAPI.getById(id);
     
     if (!table) {
       return NextResponse.json({ error: "Table not found" }, { status: 404 });
@@ -34,15 +28,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
     const { id } = params;
     const body = await request.json();
     
-    // Connect to the database
-    await connectDB();
-    
-    // Update table by ID
-    const updatedTable = await Table.findByIdAndUpdate(
-      id,
-      { ...body },
-      { new: true, runValidators: true }
-    );
+    const updatedTable = await tableAPI.update(id, body);
     
     if (!updatedTable) {
       return NextResponse.json({ error: "Table not found" }, { status: 404 });
@@ -59,13 +45,9 @@ export async function DELETE(request: NextRequest, { params }: Params) {
   try {
     const { id } = params;
     
-    // Connect to the database
-    await connectDB();
+    const success = await tableAPI.delete(id);
     
-    // Delete table by ID
-    const deletedTable = await Table.findByIdAndDelete(id);
-    
-    if (!deletedTable) {
+    if (!success) {
       return NextResponse.json({ error: "Table not found" }, { status: 404 });
     }
     

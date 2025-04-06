@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Guest from '@/models/Guest';
-import connectDB from '@/lib/mongodb';
+import { guestAPI } from '@/lib/localStore';
 
 interface Params {
   params: {
@@ -11,12 +10,7 @@ interface Params {
 export async function GET(request: NextRequest, { params }: Params) {
   try {
     const { id } = params;
-    
-    // Connect to the database
-    await connectDB();
-    
-    // Find guest by ID
-    const guest = await Guest.findById(id);
+    const guest = await guestAPI.getById(id);
     
     if (!guest) {
       return NextResponse.json({ error: "Guest not found" }, { status: 404 });
@@ -34,15 +28,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
     const { id } = params;
     const body = await request.json();
     
-    // Connect to the database
-    await connectDB();
-    
-    // Update guest by ID
-    const updatedGuest = await Guest.findByIdAndUpdate(
-      id,
-      { ...body },
-      { new: true, runValidators: true }
-    );
+    const updatedGuest = await guestAPI.update(id, body);
     
     if (!updatedGuest) {
       return NextResponse.json({ error: "Guest not found" }, { status: 404 });
@@ -59,13 +45,9 @@ export async function DELETE(request: NextRequest, { params }: Params) {
   try {
     const { id } = params;
     
-    // Connect to the database
-    await connectDB();
+    const success = await guestAPI.delete(id);
     
-    // Delete guest by ID
-    const deletedGuest = await Guest.findByIdAndDelete(id);
-    
-    if (!deletedGuest) {
+    if (!success) {
       return NextResponse.json({ error: "Guest not found" }, { status: 404 });
     }
     
